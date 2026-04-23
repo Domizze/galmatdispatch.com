@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Galmat Dispatch Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #080d1a;
+    color: #f0f4ff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── PAGE SETUP ── */
+  @page { size: letter portrait; margin: 0; }
+
+  /* ── SHARED ── */
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.6in 0.65in;
+    break-after: page;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11pt;
+    font-weight: 600;
+    color: #1a6fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14pt;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  /* ── PAGE 1: HERO ── */
+  .page-hero {
+    background: linear-gradient(135deg, #080d1a 0%, #0d1e3a 100%);
+    justify-content: center;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(26,111,255,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(26,111,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .page-hero::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 45%;
+    background: linear-gradient(135deg, transparent 40%, rgba(26,111,255,0.12) 100%);
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(26,111,255,0.12);
+    border: 1px solid rgba(26,111,255,0.3);
+    border-radius: 100px;
+    padding: 5px 14px;
+    margin-bottom: 24pt;
+  }
+  .hero-badge-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #1a6fff;
+  }
+  .hero-badge span {
+    color: #1a6fff;
+    font-size: 10pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hero-h1 {
+    font-size: 86pt;
+    font-weight: 900;
+    color: #f0f4ff;
+    margin-bottom: 20pt;
+    letter-spacing: -2px;
+    line-height: 0.9;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-h1 .accent { color: #1a6fff; }
+  .hero-sub {
+    color: #8a9bbf;
+    font-size: 14pt;
+    line-height: 1.7;
+    max-width: 5in;
+    margin-bottom: 28pt;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #1a6fff;
+    color: #fff;
+    border-radius: 8px;
+    padding: 13pt 28pt;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13pt;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 36pt;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 40pt;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 34pt;
+    color: #f0f4ff;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .hero-stat-label {
+    color: #8a9bbf;
+    font-size: 9pt;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .hero-logo {
+    position: absolute;
+    top: 0.5in;
+    left: 0.65in;
+    z-index: 2;
+  }
+  .hero-logo img { height: 36pt; filter: invert(1); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: #0a1020;
+    padding: 28pt 0.65in;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20pt;
+    break-after: avoid;
+  }
+  .stats-bar-item { text-align: center; }
+  .stats-bar-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 30pt;
+    color: #1a6fff;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .stats-bar-label {
+    color: rgba(255,255,255,0.45);
+    font-size: 8pt;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── PAGE 2: SERVICES ── */
+  .page-services {
+    background: #0d1425;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16pt;
+    margin-top: 28pt;
+    flex: 1;
+  }
+  .service-card {
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 28pt 24pt;
+  }
+  .service-icon {
+    color: #1a6fff;
+    margin-bottom: 14pt;
+  }
+  .service-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 22pt;
+    color: #f0f4ff;
+    text-transform: uppercase;
+    letter-spacing: -0.3px;
+    margin-bottom: 4pt;
+  }
+  .service-sub {
+    font-size: 9pt;
+    font-weight: 600;
+    color: #1a6fff;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12pt;
+  }
+  .service-desc { color: #8a9bbf; font-size: 11pt; line-height: 1.65; }
+
+  /* ── PAGE 3: ABOUT ── */
+  .page-about { background: #080d1a; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40pt;
+    margin-top: 28pt;
+    flex: 1;
+    align-items: start;
+  }
+  .about-body { color: #8a9bbf; font-size: 11pt; line-height: 1.75; margin-bottom: 24pt; font-weight: 300; }
+  .check-list { display: flex; flex-direction: column; gap: 11pt; }
+  .check-item { display: flex; align-items: flex-start; gap: 12pt; }
+  .check-box {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    background: #1a6fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .check-text { color: #8a9bbf; font-size: 11pt; line-height: 1.55; }
+  .how-card {
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 28pt 24pt;
+  }
+  .how-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13pt;
+    color: #1a6fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 22pt;
+  }
+  .how-step { display: flex; gap: 16pt; margin-bottom: 20pt; }
+  .how-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26pt;
+    color: #1a6fff;
+    opacity: 0.3;
+    line-height: 1;
+    min-width: 36pt;
+  }
+  .how-step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15pt;
+    color: #f0f4ff;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .how-step-desc { color: #8a9bbf; font-size: 10pt; line-height: 1.6; }
+
+  /* ── PAGE 4: TESTIMONIALS ── */
+  .page-testimonials { background: #0d1425; }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16pt;
+    margin-top: 28pt;
+  }
+  .testimonial-card {
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 24pt 20pt;
+  }
+  .stars { display: flex; gap: 3pt; margin-bottom: 14pt; color: #1a6fff; }
+  .testimonial-quote {
+    color: #f0f4ff;
+    font-size: 10.5pt;
+    line-height: 1.72;
+    margin-bottom: 18pt;
+    font-style: italic;
+    font-weight: 300;
+  }
+  .testimonial-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    margin-bottom: 14pt;
+  }
+  .testimonial-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15pt;
+    color: #f0f4ff;
+    text-transform: uppercase;
+  }
+  .testimonial-fleet { color: #8a9bbf; font-size: 9.5pt; margin-top: 3pt; }
+
+  /* ── PAGE 5: CONTACT ── */
+  .page-contact { background: #080d1a; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40pt;
+    margin-top: 28pt;
+    flex: 1;
+    align-items: start;
+  }
+  .contact-body { color: #8a9bbf; font-size: 11pt; line-height: 1.75; margin-bottom: 24pt; font-weight: 300; }
+  .contact-info-item { display: flex; align-items: center; gap: 14pt; margin-bottom: 18pt; }
+  .contact-icon-box {
+    width: 40px; height: 40px;
+    border-radius: 9px;
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: center;
+    color: #1a6fff;
+    flex-shrink: 0;
+  }
+  .contact-info-label { color: #8a9bbf; font-size: 9pt; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .contact-info-value { color: #f0f4ff; font-size: 13pt; font-weight: 500; margin-top: 2pt; }
+  .contact-form-card {
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 28pt 24pt;
+  }
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; margin-bottom: 14pt; }
+  .form-field { margin-bottom: 14pt; }
+  .form-label {
+    display: block;
+    color: #8a9bbf;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 7pt;
+  }
+  .form-input {
+    width: 100%;
+    background: #080d1a;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 7px;
+    padding: 10pt 13pt;
+    color: #8a9bbf;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10.5pt;
+    font-style: italic;
+  }
+  .form-btn {
+    width: 100%;
+    background: #1a6fff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 13pt;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13pt;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 6pt;
+  }
+
+  /* ── FOOTER ── */
+  .print-footer {
+    background: #0a1020;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 22pt 0.65in;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    break-inside: avoid;
+  }
+  .print-footer img { height: 28pt; filter: invert(1); opacity: 0.6; }
+  .print-footer-copy { color: rgba(255,255,255,0.25); font-size: 9pt; }
+
+  /* SVG icons */
+  svg { display: inline-block; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- ═══ PAGE 1: HERO ═══ -->
+<div class="page page-hero">
+  <div class="hero-logo">
+    <img src="uploads/Galmat Signature.png" alt="Galmat Dispatch Service"/>
+  </div>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; padding-top: 60pt;">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Trusted Dispatch Partner</span>
+    </div>
+    <h1 class="hero-h1">
+      YOUR LOADS<br/>
+      <span class="accent">DELIVERED.</span><br/>
+      YOUR FLEET<br/>PROTECTED.
+    </h1>
+    <p class="hero-sub">
+      Galmat Dispatch Service keeps your trucks moving with consistent, reliable dispatching across the USA — so you earn more and stress less.
+    </p>
+    <div class="hero-cta" style="width:fit-content;">
+      Get a Free Quote &nbsp;→
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">24/7</div>
+        <div class="hero-stat-label">Dispatcher Access</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">98%</div>
+        <div class="hero-stat-label">On-Time Rate</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">500+</div>
+        <div class="hero-stat-label">Loads Monthly</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR (appended to end of hero page) -->
+<div class="stats-bar">
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">24/7</div>
+    <div class="stats-bar-label">Dispatcher Availability</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">All 48</div>
+    <div class="stats-bar-label">Contiguous US States</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">No Hidden</div>
+    <div class="stats-bar-label">Fees or Contracts</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">Weekly</div>
+    <div class="stats-bar-label">Settlements</div>
+  </div>
+</div>
+
+<!-- ═══ PAGE 2: SERVICES ═══ -->
+<div class="page page-services">
+  <div class="label">What We Dispatch</div>
+  <h2 style="font-size:52pt; font-weight:800; color:#f0f4ff;">OUR SERVICES</h2>
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6fff" stroke-width="1.8" width="32" height="32"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <div class="service-title">Dry Van</div>
+      <div class="service-sub">FTL &amp; LTL</div>
+      <p class="service-desc">Full and partial truckload coverage for general freight. We negotiate top rates and keep your van moving.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6fff" stroke-width="1.8" width="32" height="32"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="service-title">Flatbed</div>
+      <div class="service-sub">All Configurations</div>
+      <p class="service-desc">Open-deck freight handling with specialized load planning. We find high-paying flatbed loads nationwide.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6fff" stroke-width="1.8" width="32" height="32"><line x1="12" y1="2" x2="12" y2="22"/><path d="m20 6-8 6-8-6"/><path d="m20 18-8-6-8 6"/><path d="m2 12 4-2 4 2-4 2z"/><path d="m14 12 4-2 4 2-4 2z"/></svg>
+      </div>
+      <div class="service-title">Reefer</div>
+      <div class="service-sub">Temperature-Controlled</div>
+      <p class="service-desc">Cold chain dispatching with temperature monitoring coordination. Perishables, pharmaceuticals, and more.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6fff" stroke-width="1.8" width="32" height="32"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      </div>
+      <div class="service-title">Step Deck &amp; Lowboy</div>
+      <div class="service-sub">Oversized &amp; Heavy Haul</div>
+      <p class="service-desc">Permit coordination, route planning, and load booking for oversize and overweight freight.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PAGE 3: ABOUT ═══ -->
+<div class="page page-about">
+  <div class="label">Why Choose Us</div>
+  <h2 style="font-size:52pt; font-weight:800; color:#f0f4ff; line-height:0.95;">CONSISTENCY &amp; RELIABILITY <span style="color:#1a6fff;">BUILT IN.</span></h2>
+  <div class="about-grid">
+    <div>
+      <p class="about-body">
+        At Galmat Dispatch, we believe your success is our success. We're not just a dispatch service — we're a partner committed to keeping your wheels turning and your revenue growing. Every load we book reflects our commitment to doing it right.
+      </p>
+      <div class="check-list">
+        <div class="check-item">
+          <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="check-text">Dedicated dispatcher assigned to your fleet</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="check-text">Rate negotiation on every load — we fight for your dollar</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="check-text">Factoring &amp; invoicing assistance included</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="check-text">FMCSA compliance guidance at no extra charge</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="check-text">No forced dispatch — you choose every load</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="check-text">Transparent reporting and weekly check-ins</span>
+        </div>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-label">How It Works</div>
+      <div class="how-step">
+        <div class="how-num">01</div>
+        <div>
+          <div class="how-step-title">Sign Up &amp; Onboard</div>
+          <div class="how-step-desc">Share your equipment type, preferred lanes, and rate targets.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">02</div>
+        <div>
+          <div class="how-step-title">We Find Your Loads</div>
+          <div class="how-step-desc">Our team sources and negotiates top loads matching your criteria.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">03</div>
+        <div>
+          <div class="how-step-title">You Drive, We Handle the Rest</div>
+          <div class="how-step-desc">We manage brokers, paperwork, tracking, and follow-ups.</div>
+        </div>
+      </div>
+      <div class="how-step" style="margin-bottom:0;">
+        <div class="how-num">04</div>
+        <div>
+          <div class="how-step-title">Get Paid Weekly</div>
+          <div class="how-step-desc">Transparent invoicing and settlement support every step.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE 4: TESTIMONIALS ═══ -->
+<div class="page page-testimonials">
+  <div class="label">Client Stories</div>
+  <h2 style="font-size:52pt; font-weight:800; color:#f0f4ff; text-align:center;">WHAT CARRIERS SAY</h2>
+  <div class="testimonials-grid">
+
+    <div class="testimonial-card">
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testimonial-quote">"Galmat has kept my truck loaded for 11 months straight. Their dispatcher is always reachable and never drops the ball. Best move I made for my business."</p>
+      <hr class="testimonial-divider"/>
+      <div class="testimonial-name">Marcus D.</div>
+      <div class="testimonial-fleet">Owner-Operator, Dry Van</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testimonial-quote">"Switched to Galmat after two bad experiences with other dispatch companies. The consistency is night and day. Our revenue went up 22% in the first quarter."</p>
+      <hr class="testimonial-divider"/>
+      <div class="testimonial-name">Sarah K.</div>
+      <div class="testimonial-fleet">Fleet Manager, 8 Trucks</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="#1a6fff" width="14" height="14"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testimonial-quote">"They negotiate hard — I'm averaging $0.30 more per mile than I was booking myself. And I don't have to waste hours on the phone anymore."</p>
+      <hr class="testimonial-divider"/>
+      <div class="testimonial-name">James T.</div>
+      <div class="testimonial-fleet">Owner-Operator, Flatbed</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PAGE 5: CONTACT ═══ -->
+<div class="page page-contact">
+  <div class="label">Get Started</div>
+  <h2 style="font-size:52pt; font-weight:800; color:#f0f4ff; line-height:0.95;">READY TO ROLL? <span style="color:#1a6fff;">LET'S TALK.</span></h2>
+  <div class="contact-grid">
+    <div>
+      <p class="contact-body">Get a no-obligation quote from our team. We'll match you with a dedicated dispatcher and outline a plan built around your fleet.</p>
+      <div class="contact-info-item">
+        <div class="contact-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a6fff" stroke-width="1.8" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-info-label">Call Us</div>
+          <div class="contact-info-value">+1 (224) 443-9797</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a6fff" stroke-width="1.8" width="18" height="18"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <div>
+          <div class="contact-info-label">Email Us</div>
+          <div class="contact-info-value">info@galmatdispatch.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form-card">
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label">Name</label>
+          <div class="form-input">Your full name</div>
+        </div>
+        <div>
+          <label class="form-label">Phone</label>
+          <div class="form-input">(000) 000-0000</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <div class="form-input">your@email.com</div>
+      </div>
+      <div class="form-grid-2">
+        <div>
+          <label class="form-label">Fleet Size</label>
+          <div class="form-input">Select...</div>
+        </div>
+        <div>
+          <label class="form-label">Service Type</label>
+          <div class="form-input">Select...</div>
+        </div>
+      </div>
+      <div class="form-field" style="margin-bottom:0;">
+        <label class="form-label">Message</label>
+        <div class="form-input" style="min-height:60pt;">Tell us about your routes...</div>
+      </div>
+      <div class="form-btn">Send Request →</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="print-footer">
+  <img src="uploads/Galmat Signature.png" alt="Galmat Dispatch Service"/>
+  <div class="print-footer-copy">© 2026 Galmat Dispatch Service LLC &nbsp;·&nbsp; info@galmatdispatch.com &nbsp;·&nbsp; (224) 443-9797</div>
+</div>
+
+<script>
+  document.fonts.ready.then(function() {
+    setTimeout(function() { window.print(); }, 500);
+  });
+</script>
+</body>
+</html>

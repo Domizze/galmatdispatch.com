@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Galmat Dispatch Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "variant": "dark",
+  "accentColor": "#1a6fff",
+  "headingFont": "Barlow Condensed"
+}/*EDITMODE-END*/;
+
+// ─── THEME DEFINITIONS ─────────────────────────────────────────────────────
+const themes = {
+  dark: {
+    label: "Dark Industrial",
+    bg: "#080d1a",
+    bgSecondary: "#0d1425",
+    bgCard: "#111827",
+    bgCardHover: "#1a2540",
+    border: "rgba(255,255,255,0.07)",
+    text: "#f0f4ff",
+    textMuted: "#8a9bbf",
+    textDim: "#4a5a7a",
+    accent: "#1a6fff",
+    accentHover: "#3d82ff",
+    accentGlow: "rgba(26,111,255,0.25)",
+    navBg: "rgba(8,13,26,0.92)",
+    statsBg: "#0a1020",
+    heroOverlay: "linear-gradient(135deg, #080d1a 0%, #0d1e3a 100%)",
+    gridColor: "rgba(26,111,255,0.04)",
+  },
+  light: {
+    label: "Clean Corporate",
+    bg: "#f8f9fc",
+    bgSecondary: "#ffffff",
+    bgCard: "#ffffff",
+    bgCardHover: "#f0f4ff",
+    border: "rgba(0,0,0,0.08)",
+    text: "#0a1020",
+    textMuted: "#4a5a7a",
+    textDim: "#8a9bbf",
+    accent: "#1255d4",
+    accentHover: "#1a6fff",
+    accentGlow: "rgba(18,85,212,0.15)",
+    navBg: "rgba(248,249,252,0.95)",
+    statsBg: "#0a1020",
+    heroOverlay: "linear-gradient(135deg, #0a1020 0%, #0d2050 100%)",
+    gridColor: "rgba(18,85,212,0.04)",
+  },
+  amber: {
+    label: "Bold Command",
+    bg: "#09080a",
+    bgSecondary: "#111013",
+    bgCard: "#141218",
+    bgCardHover: "#1e1b22",
+    border: "rgba(255,255,255,0.07)",
+    text: "#f5f0e8",
+    textMuted: "#a09080",
+    textDim: "#5a4a40",
+    accent: "#e8840a",
+    accentHover: "#f59d2a",
+    accentGlow: "rgba(232,132,10,0.25)",
+    navBg: "rgba(9,8,10,0.92)",
+    statsBg: "#060508",
+    heroOverlay: "linear-gradient(135deg, #09080a 0%, #1a1008 100%)",
+    gridColor: "rgba(232,132,10,0.04)",
+  },
+};
+
+// ─── ICONS ──────────────────────────────────────────────────────────────────
+const IconTruck = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="28" height="28"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>;
+const IconSnow = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="28" height="28"><line x1="12" y1="2" x2="12" y2="22"/><path d="m20 6-8 6-8-6"/><path d="m20 18-8-6-8 6"/><path d="m2 12 4-2 4 2-4 2z"/><path d="m14 12 4-2 4 2-4 2z"/></svg>;
+const IconGrid = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="28" height="28"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>;
+const IconLayers = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="28" height="28"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+const IconPhone = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>;
+const IconMail = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="18" height="18"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>;
+const IconCheck = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>;
+const IconChevron = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>;
+const IconMenu = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="22" height="22"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+const IconClose = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="22" height="22"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+const IconStar = () => <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+const IconArrow = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
+const IconFacebook = () => <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>;
+const IconTelegram = () => <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M21.8 2.1L1.4 9.8c-1.4.5-1.3 1.3-.2 1.6l5.1 1.6 11.8-7.4c.6-.3 1.1-.1.7.4L8.9 15.5l-.4 5.2c.6 0 .9-.3 1.2-.6l2.9-2.8 5.1 3.8c.9.5 1.6.3 1.9-.9l3.4-16.1c.4-1.6-.6-2.3-1.2-2z"/></svg>;
+
+// ─── NAV ────────────────────────────────────────────────────────────────────
+function Nav({ theme, setVariant, tweaks }) {
+  const [scrolled, setScrolled] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  React.useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  const links = ['services','about','testimonials','contact'];
+  const scrollTo = (id) => { setMobileOpen(false); document.getElementById(id)?.scrollIntoView({block:'start'}); };
+  return (
+    <nav style={{
+      position:'fixed',top:0,left:0,right:0,zIndex:100,
+      background: scrolled ? theme.navBg : 'transparent',
+      backdropFilter: scrolled ? 'blur(16px)' : 'none',
+      borderBottom: scrolled ? `1px solid ${theme.border}` : 'none',
+      transition:'all 0.3s ease',
+    }}>
+      <div style={{maxWidth:1200,margin:'0 auto',padding:'0 32px',display:'flex',alignItems:'center',justifyContent:'space-between',height:72}}>
+        <div style={{display:'flex',alignItems:'center'}}>
+          <img src="uploads/Galmat Signature.png" alt="Galmat Dispatch Service" style={{height:52,filter: tweaks.variant==='light' ? 'none' : 'invert(1)',transition:'filter 0.3s'}}/>
+        </div>
+        {/* Desktop Links */}
+        <div style={{display:'flex',alignItems:'center',gap:36,display:'flex'}} className="desktop-nav">
+          {links.map(l => (
+            <button key={l} onClick={() => scrollTo(l)} style={{background:'none',border:'none',cursor:'pointer',color:theme.textMuted,fontFamily:'DM Sans',fontSize:14,fontWeight:500,letterSpacing:'0.5px',textTransform:'uppercase',transition:'color 0.2s'}}>
+              {l}
+            </button>
+          ))}
+          <button onClick={() => scrollTo('contact')} style={{background:theme.accent,color:'#fff',border:'none',borderRadius:6,padding:'10px 22px',fontFamily:'DM Sans',fontSize:14,fontWeight:600,cursor:'pointer',letterSpacing:'0.3px',transition:'background 0.2s'}}>
+            Get a Quote
+          </button>
+        </div>
+        {/* Mobile menu btn */}
+        <button onClick={()=>setMobileOpen(!mobileOpen)} style={{display:'none',background:'none',border:'none',color:theme.text,cursor:'pointer'}} className="mobile-menu-btn">
+          {mobileOpen ? <IconClose/> : <IconMenu/>}
+        </button>
+      </div>
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div style={{background:theme.navBg,backdropFilter:'blur(16px)',borderTop:`1px solid ${theme.border}`,padding:'16px 32px 24px'}}>
+          {links.map(l => (
+            <button key={l} onClick={()=>scrollTo(l)} style={{display:'block',width:'100%',textAlign:'left',background:'none',border:'none',cursor:'pointer',color:theme.textMuted,fontFamily:'DM Sans',fontSize:15,fontWeight:500,padding:'12px 0',borderBottom:`1px solid ${theme.border}`}}>
+              {l.charAt(0).toUpperCase()+l.slice(1)}
+            </button>
+          ))}
+          <button onClick={()=>scrollTo('contact')} style={{marginTop:16,width:'100%',background:theme.accent,color:'#fff',border:'none',borderRadius:6,padding:'13px',fontFamily:'DM Sans',fontSize:15,fontWeight:600,cursor:'pointer'}}>
+            Get a Quote
+          </button>
+        </div>
+      )}
+      <style>{`
+        @media(max-width:768px){
+          .desktop-nav{display:none!important;}
+          .mobile-menu-btn{display:flex!important;}
+        }
+      `}</style>
+    </nav>
+  );
+}
+
+// ─── HERO ───────────────────────────────────────────────────────────────────
+function Hero({ theme }) {
+  return (
+    <section style={{position:'relative',minHeight:'100vh',display:'flex',alignItems:'center',overflow:'hidden',background:theme.heroOverlay}}>
+      {/* Grid texture */}
+      <div style={{position:'absolute',inset:0,backgroundImage:`linear-gradient(${theme.gridColor} 1px, transparent 1px), linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px)`,backgroundSize:'60px 60px',pointerEvents:'none'}}/>
+      {/* Diagonal accent */}
+      <div style={{position:'absolute',right:0,top:0,bottom:0,width:'45%',background:`linear-gradient(135deg, transparent 40%, ${theme.accentGlow} 100%)`,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',right:'8%',top:'50%',transform:'translateY(-50%)',width:380,height:380,borderRadius:'50%',background:`radial-gradient(circle, ${theme.accentGlow} 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      {/* Truck illustration placeholder */}
+      <div style={{position:'absolute',right:'5%',bottom:'10%',width:420,height:220,display:'flex',alignItems:'center',justifyContent:'center',opacity:0.12}}>
+        <svg viewBox="0 0 420 220" fill="none" width="420" height="220">
+          <rect x="0" y="80" width="280" height="110" rx="8" fill={theme.accent}/>
+          <rect x="280" y="40" width="140" height="150" rx="8" fill={theme.accent} opacity="0.7"/>
+          <circle cx="80" cy="200" r="28" fill={theme.accent}/>
+          <circle cx="220" cy="200" r="28" fill={theme.accent}/>
+          <circle cx="350" cy="200" r="28" fill={theme.accent}/>
+          <rect x="290" y="60" width="110" height="70" rx="4" fill="white" opacity="0.15"/>
+          <line x1="0" y1="80" x2="420" y2="80" stroke={theme.accent} strokeWidth="2" opacity="0.3"/>
+        </svg>
+      </div>
+      <div style={{position:'relative',maxWidth:1200,margin:'0 auto',padding:'120px 32px 80px',width:'100%'}}>
+        <div style={{maxWidth:680}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:8,background:`${theme.accentGlow}`,border:`1px solid ${theme.accent}40`,borderRadius:100,padding:'6px 16px',marginBottom:32}}>
+            <div style={{width:8,height:8,borderRadius:'50%',background:theme.accent,boxShadow:`0 0 8px ${theme.accent}`}}/>
+            <span style={{color:theme.accent,fontFamily:'DM Sans',fontSize:13,fontWeight:600,letterSpacing:'1px',textTransform:'uppercase'}}>Trusted Dispatch Partner</span>
+          </div>
+          <h1 style={{fontFamily:'Barlow Condensed',fontWeight:900,fontSize:'clamp(52px,7vw,96px)',lineHeight:0.92,color:theme.text,marginBottom:28,letterSpacing:'-1px',textTransform:'uppercase'}}>
+            YOUR LOADS<br/>
+            <span style={{color:theme.accent}}>DELIVERED.</span><br/>
+            YOUR FLEET<br/>PROTECTED.
+          </h1>
+          <p style={{color:theme.textMuted,fontSize:'clamp(16px,2vw,19px)',lineHeight:1.7,marginBottom:44,maxWidth:520,fontWeight:300}}>
+            Galmat Dispatch Service keeps your trucks moving with consistent, reliable dispatching across the USA — so you earn more and stress less.
+          </p>
+          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+            <button onClick={()=>document.getElementById('contact')?.scrollIntoView({block:'start'})} style={{display:'flex',alignItems:'center',gap:10,background:theme.accent,color:'#fff',border:'none',borderRadius:8,padding:'16px 32px',fontFamily:'DM Sans',fontSize:16,fontWeight:600,cursor:'pointer',transition:'all 0.2s',boxShadow:`0 8px 32px ${theme.accentGlow}`}}>
+              Get a Free Quote <IconArrow/>
+            </button>
+            <a href="tel:+12244439797" style={{display:'flex',alignItems:'center',gap:10,background:'transparent',color:theme.text,border:`1.5px solid ${theme.border}`,borderRadius:8,padding:'16px 28px',fontFamily:'DM Sans',fontSize:16,fontWeight:500,textDecoration:'none',transition:'all 0.2s'}}>
+              <IconPhone/> (224) 443-9797
+            </a>
+          </div>
+          <div style={{marginTop:56,display:'flex',gap:40,flexWrap:'wrap'}}>
+            {[['24/7','Dispatcher Access'],['98%','On-Time Rate'],['500+','Loads Monthly']].map(([num,label])=>(
+              <div key={label}>
+                <div style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:36,color:theme.text,letterSpacing:'-1px'}}>{num}</div>
+                <div style={{color:theme.textMuted,fontSize:13,fontWeight:500,letterSpacing:'0.5px',textTransform:'uppercase'}}>{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── SERVICES ───────────────────────────────────────────────────────────────
+const SERVICES = [
+  {icon:<IconTruck/>,title:"Dry Van",sub:"FTL & LTL",desc:"Full and partial truckload coverage for general freight. We negotiate top rates and keep your van moving."},
+  {icon:<IconGrid/>,title:"Flatbed",sub:"All Configurations",desc:"Open-deck freight handling with specialized load planning. We find high-paying flatbed loads nationwide."},
+  {icon:<IconSnow/>,title:"Reefer",sub:"Temperature-Controlled",desc:"Cold chain dispatching with temperature monitoring coordination. Perishables, pharmaceuticals, and more."},
+  {icon:<IconLayers/>,title:"Step Deck & Lowboy",sub:"Oversized & Heavy Haul",desc:"Permit coordination, route planning, and load booking for oversize and overweight freight."},
+];
+
+function Services({ theme }) {
+  const [hovered, setHovered] = React.useState(null);
+  return (
+    <section id="services" style={{background:theme.bgSecondary,padding:'100px 32px'}}>
+      <div style={{maxWidth:1200,margin:'0 auto'}}>
+        <div style={{marginBottom:64}}>
+          <div style={{fontFamily:'DM Sans',fontSize:13,fontWeight:600,color:theme.accent,letterSpacing:'2px',textTransform:'uppercase',marginBottom:16}}>What We Dispatch</div>
+          <h2 style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:'clamp(36px,5vw,60px)',color:theme.text,letterSpacing:'-0.5px',textTransform:'uppercase',lineHeight:1}}>Our Services</h2>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:24}}>
+          {SERVICES.map((s,i)=>(
+            <div key={i} onMouseEnter={()=>setHovered(i)} onMouseLeave={()=>setHovered(null)} style={{
+              background: hovered===i ? theme.bgCardHover : theme.bgCard,
+              border:`1px solid ${hovered===i ? theme.accent+'50' : theme.border}`,
+              borderRadius:12,padding:'36px 32px',
+              transition:'all 0.25s ease',
+              cursor:'default',
+              transform: hovered===i ? 'translateY(-4px)' : 'none',
+              boxShadow: hovered===i ? `0 12px 40px ${theme.accentGlow}` : 'none',
+            }}>
+              <div style={{color:theme.accent,marginBottom:20}}>{s.icon}</div>
+              <div style={{fontFamily:'Barlow Condensed',fontWeight:700,fontSize:26,color:theme.text,letterSpacing:'-0.3px',textTransform:'uppercase',marginBottom:4}}>{s.title}</div>
+              <div style={{fontFamily:'DM Sans',fontSize:12,fontWeight:600,color:theme.accent,letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:16}}>{s.sub}</div>
+              <p style={{color:theme.textMuted,fontSize:15,lineHeight:1.7}}>{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── STATS BAR ──────────────────────────────────────────────────────────────
+function StatsBar({ theme }) {
+  const stats = [
+    {num:'All 48', label:'Contiguous US States'},
+    {num:'No Hidden', label:'Fees or Contracts'},
+    {num:'Top Rates', label:'Negotiated For You'},
+    {num:'Weekly', label:'Settlements'},
+  ];
+  return (
+    <section style={{background:theme.statsBg,padding:'48px 32px',borderTop:`1px solid ${theme.border}`}}>
+      <div style={{maxWidth:1200,margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:32}}>
+        {stats.map((s,i)=>(
+          <div key={i} style={{textAlign:'center'}}>
+            <div style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:42,color:theme.accent,letterSpacing:'-1px',lineHeight:1}}>{s.num}</div>
+            <div style={{color:'rgba(255,255,255,0.5)',fontSize:13,fontWeight:500,letterSpacing:'1px',textTransform:'uppercase',marginTop:6}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── ABOUT ──────────────────────────────────────────────────────────────────
+const WHY_POINTS = [
+  "Dedicated dispatcher assigned to your fleet",
+  "Rate negotiation on every load — we fight for your dollar",
+  "Factoring & invoicing assistance available",
+
+  "No forced dispatch — you choose every load",
+  "Transparent reporting and weekly check-ins",
+];
+
+function About({ theme }) {
+  return (
+    <section id="about" style={{background:theme.bg,padding:'100px 32px'}}>
+      <div style={{maxWidth:1200,margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:80,alignItems:'center'}}>
+        <div>
+          <div style={{fontFamily:'DM Sans',fontSize:13,fontWeight:600,color:theme.accent,letterSpacing:'2px',textTransform:'uppercase',marginBottom:16}}>Why Choose Us</div>
+          <h2 style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:'clamp(36px,5vw,60px)',color:theme.text,letterSpacing:'-0.5px',textTransform:'uppercase',lineHeight:1,marginBottom:24}}>
+            Consistency<br/>& Reliability<br/><span style={{color:theme.accent}}>Built In.</span>
+          </h2>
+          <p style={{color:theme.textMuted,fontSize:16,lineHeight:1.8,marginBottom:40,fontWeight:300}}>
+            At Galmat Dispatch, we believe your success is our success. We're not just a dispatch service — we're a partner committed to keeping your wheels turning and your revenue growing. Every load we book reflects our commitment to doing it right.
+          </p>
+          <div style={{display:'grid',gap:14}}>
+            {WHY_POINTS.map((p,i)=>(
+              <div key={i} style={{display:'flex',alignItems:'flex-start',gap:14}}>
+                <div style={{width:24,height:24,borderRadius:6,background:theme.accent,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:1}}>
+                  <IconCheck/>
+                </div>
+                <span style={{color:theme.textMuted,fontSize:15,lineHeight:1.6}}>{p}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Visual panel */}
+        <div style={{position:'relative'}}>
+          <div style={{background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:16,padding:40,position:'relative',overflow:'hidden'}}>
+            <div style={{position:'absolute',top:0,right:0,width:200,height:200,background:`radial-gradient(circle, ${theme.accentGlow} 0%, transparent 70%)`,pointerEvents:'none'}}/>
+            <div style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:18,color:theme.accent,letterSpacing:'2px',textTransform:'uppercase',marginBottom:32}}>How It Works</div>
+            {[['01','Sign Up & Onboard','Share your equipment type, preferred lanes, and rate targets.'],
+              ['02','We Find Your Loads','Our team sources and negotiates top loads matching your criteria.'],
+              ['03','You Drive, We Handle the Rest','We manage brokers, paperwork, tracking, and follow-ups.'],
+              ['04','Carriers Get Paid','We handle invoicing follow-up and settlement coordination to keep your cash flowing.'],
+            ].map(([n,t,d])=>(
+              <div key={n} style={{display:'flex',gap:20,marginBottom:28}}>
+                <div style={{fontFamily:'Barlow Condensed',fontWeight:900,fontSize:32,color:theme.accent,opacity:0.35,lineHeight:1,minWidth:42}}>{n}</div>
+                <div>
+                  <div style={{fontFamily:'Barlow Condensed',fontWeight:700,fontSize:18,color:theme.text,textTransform:'uppercase',marginBottom:4}}>{t}</div>
+                  <div style={{color:theme.textMuted,fontSize:14,lineHeight:1.6}}>{d}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <style>{`@media(max-width:768px){#about .about-grid{grid-template-columns:1fr!important;}}`}</style>
+    </section>
+  );
+}
+
+// ─── TESTIMONIALS ───────────────────────────────────────────────────────────
+const TESTIMONIALS = [
+  {name:"Colesnic Iuliana",fleet:"Recommends on Facebook",quote:"Galmat Team is top notch. They are super professional, reliable, friendly, dedicated, pay attention to every detail, they are treating drivers as a priority. They are best in class.",rating:5},
+  {name:"Ion Chitanu",fleet:"Recommends on Facebook",quote:"Working with them for over 1 year, definitely recommend!",rating:5},
+  {name:"Dmitri V.",fleet:"Owner-Operator, Flatbed",quote:"I've worked with a few dispatch companies before and none of them come close. Galmat actually picks up the phone when it matters. My truck hasn't sat idle in months.",rating:5},
+  {name:"Maria S.",fleet:"Small Fleet, 3 Trucks",quote:"Switching to Galmat was the best decision I made for my business. They handle everything professionally and always keep me in the loop. Highly recommend.",rating:5},
+  {name:"Andre K.",fleet:"Owner-Operator, Dry Van",quote:"Great rates, great communication. They found me a load the same day I signed up. Exactly what I was looking for in a dispatch partner.",rating:5},
+];
+
+function Testimonials({ theme }) {
+  return (
+    <section id="testimonials" style={{background:theme.bgSecondary,padding:'100px 32px'}}>
+      <div style={{maxWidth:1200,margin:'0 auto'}}>
+        <div style={{marginBottom:64,textAlign:'center'}}>
+          <div style={{fontFamily:'DM Sans',fontSize:13,fontWeight:600,color:theme.accent,letterSpacing:'2px',textTransform:'uppercase',marginBottom:16}}>Client Stories</div>
+          <h2 style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:'clamp(36px,5vw,60px)',color:theme.text,letterSpacing:'-0.5px',textTransform:'uppercase',lineHeight:1}}>What Carriers Say</h2>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:24}}>
+          {TESTIMONIALS.map((t,i)=>(
+            <div key={i} style={{background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:12,padding:'36px 32px'}}>
+              <div style={{display:'flex',gap:4,marginBottom:20}}>
+                {Array(t.rating).fill(0).map((_,j)=><span key={j} style={{color:theme.accent}}><IconStar/></span>)}
+              </div>
+              <p style={{color:theme.text,fontSize:16,lineHeight:1.75,marginBottom:28,fontStyle:'italic',fontWeight:300}}>"{t.quote}"</p>
+              <div style={{borderTop:`1px solid ${theme.border}`,paddingTop:20}}>
+                <div style={{fontFamily:'Barlow Condensed',fontWeight:700,fontSize:18,color:theme.text,textTransform:'uppercase'}}>{t.name}</div>
+                <div style={{color:theme.textMuted,fontSize:13,marginTop:2}}>{t.fleet}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── CONTACT ────────────────────────────────────────────────────────────────
+function Contact({ theme }) {
+  const [form, setForm] = React.useState({name:'',email:'',phone:'',fleet:'',service:'',message:''});
+  const [submitted, setSubmitted] = React.useState(false);
+  const set = (k,v) => setForm(f=>({...f,[k]:v}));
+  const inputStyle = {width:'100%',background:theme.bgCard,border:`1.5px solid ${theme.border}`,borderRadius:8,padding:'13px 16px',color:theme.text,fontFamily:'DM Sans',fontSize:15,outline:'none',transition:'border-color 0.2s'};
+  const labelStyle = {display:'block',color:theme.textMuted,fontSize:13,fontWeight:600,letterSpacing:'0.5px',textTransform:'uppercase',marginBottom:8};
+  const handleSubmit = (e) => { e.preventDefault(); setSubmitted(true); };
+  return (
+    <section id="contact" style={{background:theme.bg,padding:'100px 32px'}}>
+      <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1.4fr',gap:80,alignItems:'start'}}>
+        <div>
+          <div style={{fontFamily:'DM Sans',fontSize:13,fontWeight:600,color:theme.accent,letterSpacing:'2px',textTransform:'uppercase',marginBottom:16}}>Get Started</div>
+          <h2 style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:'clamp(36px,5vw,60px)',color:theme.text,letterSpacing:'-0.5px',textTransform:'uppercase',lineHeight:1,marginBottom:24}}>
+            Ready to Roll?<br/><span style={{color:theme.accent}}>Let's Talk.</span>
+          </h2>
+          <p style={{color:theme.textMuted,fontSize:16,lineHeight:1.8,marginBottom:40,fontWeight:300}}>
+            Get a no-obligation quote from our team. We'll match you with a dedicated dispatcher and outline a plan built around your fleet.
+          </p>
+          <div style={{display:'flex',flexDirection:'column',gap:20}}>
+            <a href="tel:+12244439797" style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none'}}>
+              <div style={{width:44,height:44,borderRadius:10,background:theme.bgCard,border:`1px solid ${theme.border}`,display:'flex',alignItems:'center',justifyContent:'center',color:theme.accent}}>
+                <IconPhone/>
+              </div>
+              <div>
+                <div style={{color:theme.textMuted,fontSize:12,fontWeight:600,letterSpacing:'1px',textTransform:'uppercase'}}>Call Us</div>
+                <div style={{color:theme.text,fontSize:16,fontWeight:500}}>+1 (224) 443-9797</div>
+              </div>
+            </a>
+            <a href="mailto:info@galmatdispatch.com" style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none'}}>
+              <div style={{width:44,height:44,borderRadius:10,background:theme.bgCard,border:`1px solid ${theme.border}`,display:'flex',alignItems:'center',justifyContent:'center',color:theme.accent}}>
+                <IconMail/>
+              </div>
+              <div>
+                <div style={{color:theme.textMuted,fontSize:12,fontWeight:600,letterSpacing:'1px',textTransform:'uppercase'}}>Email Us</div>
+                <div style={{color:theme.text,fontSize:16,fontWeight:500}}>info@galmatdispatch.com</div>
+              </div>
+            </a>
+            <a href="https://www.facebook.com/galmatdispatch" target="_blank" rel="noopener" style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none'}}>
+              <div style={{width:44,height:44,borderRadius:10,background:theme.bgCard,border:`1px solid ${theme.border}`,display:'flex',alignItems:'center',justifyContent:'center',color:theme.accent}}>
+                <IconFacebook/>
+              </div>
+              <div>
+                <div style={{color:theme.textMuted,fontSize:12,fontWeight:600,letterSpacing:'1px',textTransform:'uppercase'}}>Facebook</div>
+                <div style={{color:theme.text,fontSize:16,fontWeight:500}}>facebook.com/galmatdispatch</div>
+              </div>
+            </a>
+            <a href="https://t.me/CezarGDS" target="_blank" rel="noopener" style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none'}}>
+              <div style={{width:44,height:44,borderRadius:10,background:theme.bgCard,border:`1px solid ${theme.border}`,display:'flex',alignItems:'center',justifyContent:'center',color:theme.accent}}>
+                <IconTelegram/>
+              </div>
+              <div>
+                <div style={{color:theme.textMuted,fontSize:12,fontWeight:600,letterSpacing:'1px',textTransform:'uppercase'}}>Telegram</div>
+                <div style={{color:theme.text,fontSize:16,fontWeight:500}}>@CezarGDS</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div style={{background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:16,padding:'48px 40px'}}>
+          {submitted ? (
+            <div style={{textAlign:'center',padding:'40px 0'}}>
+              <div style={{width:64,height:64,borderRadius:'50%',background:theme.accent,margin:'0 auto 24px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <IconCheck/>
+              </div>
+              <h3 style={{fontFamily:'Barlow Condensed',fontWeight:800,fontSize:32,color:theme.text,textTransform:'uppercase',marginBottom:12}}>Message Sent!</h3>
+              <p style={{color:theme.textMuted,fontSize:15,lineHeight:1.7}}>Our team will reach out within 1 business hour. We look forward to working with you.</p>
+              <button onClick={()=>setSubmitted(false)} style={{marginTop:28,background:'none',border:`1.5px solid ${theme.border}`,color:theme.textMuted,borderRadius:8,padding:'12px 24px',cursor:'pointer',fontFamily:'DM Sans',fontSize:14}}>Send Another</button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:20}}>
+                <div>
+                  <label style={labelStyle}>Name</label>
+                  <input required style={inputStyle} placeholder="Your full name" value={form.name} onChange={e=>set('name',e.target.value)}/>
+                </div>
+                <div>
+                  <label style={labelStyle}>Phone</label>
+                  <input style={inputStyle} placeholder="(000) 000-0000" value={form.phone} onChange={e=>set('phone',e.target.value)}/>
+                </div>
+              </div>
+              <div style={{marginBottom:20}}>
+                <label style={labelStyle}>Email</label>
+                <input required type="email" style={inputStyle} placeholder="your@email.com" value={form.email} onChange={e=>set('email',e.target.value)}/>
+              </div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:20}}>
+                <div>
+                  <label style={labelStyle}>Fleet Size</label>
+                  <select style={{...inputStyle,cursor:'pointer'}} value={form.fleet} onChange={e=>set('fleet',e.target.value)}>
+                    <option value="">Select</option>
+                    <option>Owner-Operator (1)</option>
+                    <option>Small Fleet (2–10)</option>
+                    <option>Mid-Size (11–50)</option>
+                    <option>Large Carrier (50+)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={labelStyle}>Service Type</label>
+                  <select style={{...inputStyle,cursor:'pointer'}} value={form.service} onChange={e=>set('service',e.target.value)}>
+                    <option value="">Select</option>
+                    <option>Dry Van</option>
+                    <option>Flatbed</option>
+                    <option>Reefer</option>
+                    <option>Step Deck / Lowboy</option>
+                    <option>Multiple</option>
+                  </select>
+                </div>
+              </div>
+              <div style={{marginBottom:28}}>
+                <label style={labelStyle}>Message (optional)</label>
+                <textarea style={{...inputStyle,resize:'vertical',minHeight:100}} placeholder="Tell us about your routes or requirements..." value={form.message} onChange={e=>set('message',e.target.value)}/>
+              </div>
+              <button type="submit" style={{width:'100%',background:theme.accent,color:'#fff',border:'none',borderRadius:8,padding:'16px',fontFamily:'DM Sans',fontSize:16,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:10,boxShadow:`0 8px 32px ${theme.accentGlow}`}}>
+                Send Request <IconArrow/>
+              </button>
+              <p style={{color:theme.textDim,fontSize:12,lineHeight:1.6,marginTop:14,textAlign:'center'}}>
+                By submitting this form you agree to our{' '}
+                <a href="privacy-policy.html" style={{color:theme.textMuted,textDecoration:'underline'}}>Privacy Policy</a>.
+                Your information will only be used to respond to your inquiry.
+              </p>
+            </form>
+          )}
+        </div>
+      </div>
+      <style>{`@media(max-width:768px){#contact>div{grid-template-columns:1fr!important;}}`}</style>
+    </section>
+  );
+}
+
+// ─── FOOTER ─────────────────────────────────────────────────────────────────
+function Footer({ theme }) {
+  return (
+    <footer style={{background:theme.statsBg,borderTop:`1px solid ${theme.border}`,padding:'48px 32px 32px'}}>
+      <div style={{maxWidth:1200,margin:'0 auto'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:24,marginBottom:32}}>
+          <div>
+            <img src="uploads/Galmat Signature.png" alt="Galmat Dispatch Service" style={{height:36,filter:'invert(1)',opacity:0.7}}/>
+          </div>
+          <div style={{display:'flex',gap:32,flexWrap:'wrap'}}>
+            {['Services','About','Testimonials','Contact'].map(l=>(
+              <button key={l} onClick={()=>document.getElementById(l.toLowerCase())?.scrollIntoView({block:'start'})} style={{background:'none',border:'none',color:'rgba(255,255,255,0.4)',fontFamily:'DM Sans',fontSize:14,cursor:'pointer',transition:'color 0.2s'}}>{l}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{borderTop:`1px solid rgba(255,255,255,0.06)`,paddingTop:24,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:12}}>
+          <span style={{color:'rgba(255,255,255,0.25)',fontSize:13}}>© 2026 Galmat Dispatch Service LLC. All rights reserved. · <a href="privacy-policy.html" style={{color:'rgba(255,255,255,0.3)',textDecoration:'none'}}>Privacy Policy</a></span>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+            <a href="https://www.facebook.com/galmatdispatch" target="_blank" rel="noopener" style={{width:36,height:36,borderRadius:8,background:'rgba(255,255,255,0.06)',border:`1px solid rgba(255,255,255,0.08)`,display:'flex',alignItems:'center',justifyContent:'center',color:'rgba(255,255,255,0.4)',textDecoration:'none',transition:'all 0.2s'}}>
+              <IconFacebook/>
+            </a>
+            <a href="https://t.me/CezarGDS" target="_blank" rel="noopener" style={{width:36,height:36,borderRadius:8,background:'rgba(255,255,255,0.06)',border:`1px solid rgba(255,255,255,0.08)`,display:'flex',alignItems:'center',justifyContent:'center',color:'rgba(255,255,255,0.4)',textDecoration:'none',transition:'all 0.2s'}}>
+              <IconTelegram/>
+            </a>
+            <span style={{color:'rgba(255,255,255,0.25)',fontSize:13,marginLeft:8}}>info@galmatdispatch.com · (224) 443-9797</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ─── TWEAKS PANEL ───────────────────────────────────────────────────────────
+function TweaksPanel({ tweaks, setTweaks, theme }) {
+  return (
+    <div style={{position:'fixed',bottom:24,right:24,zIndex:1000,background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:14,padding:'24px',width:260,boxShadow:`0 20px 60px rgba(0,0,0,0.4)`}}>
+      <div style={{fontFamily:'Barlow Condensed',fontWeight:700,fontSize:18,color:theme.text,textTransform:'uppercase',letterSpacing:'1px',marginBottom:20}}>Tweaks</div>
+      <div style={{marginBottom:20}}>
+        <div style={{color:theme.textMuted,fontSize:12,fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',marginBottom:12}}>Design Variant</div>
+        {Object.entries(themes).map(([key,t])=>(
+          <button key={key} onClick={()=>setTweaks(tw=>({...tw,variant:key}))} style={{display:'block',width:'100%',textAlign:'left',marginBottom:8,padding:'10px 14px',borderRadius:8,border:`1.5px solid ${tweaks.variant===key ? theme.accent : theme.border}`,background: tweaks.variant===key ? `${theme.accentGlow}` : 'transparent',color: tweaks.variant===key ? theme.accent : theme.textMuted,fontFamily:'DM Sans',fontSize:14,cursor:'pointer',transition:'all 0.2s'}}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── APP ────────────────────────────────────────────────────────────────────
+function App() {
+  const saved = (() => { try { return JSON.parse(localStorage.getItem('galmat-tweaks') || '{}'); } catch(e) { return {}; }})();
+  const [tweaks, setTweaksRaw] = React.useState({...TWEAK_DEFAULTS, ...saved});
+  const [showTweaks, setShowTweaks] = React.useState(false);
+
+  const setTweaks = (updater) => {
+    setTweaksRaw(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : {...prev,...updater};
+      localStorage.setItem('galmat-tweaks', JSON.stringify(next));
+      window.parent.postMessage({type:'__edit_mode_set_keys', edits: next}, '*');
+      return next;
+    });
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('message', (e) => {
+      if (e.data?.type === '__activate_edit_mode') setShowTweaks(true);
+      if (e.data?.type === '__deactivate_edit_mode') setShowTweaks(false);
+    });
+    window.parent.postMessage({type:'__edit_mode_available'}, '*');
+  }, []);
+
+  const theme = themes[tweaks.variant] || themes.dark;
+
+  return (
+    <div style={{background:theme.bg,color:theme.text,minHeight:'100vh',transition:'background 0.4s, color 0.4s'}}>
+      <Nav theme={theme} tweaks={tweaks} setVariant={(v)=>setTweaks(t=>({...t,variant:v}))}/>
+      <Hero theme={theme}/>
+      <StatsBar theme={theme}/>
+      <Services theme={theme}/>
+      <About theme={theme}/>
+      <Testimonials theme={theme}/>
+      <Contact theme={theme}/>
+      <Footer theme={theme}/>
+      {showTweaks && <TweaksPanel tweaks={tweaks} setTweaks={setTweaks} theme={theme}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
