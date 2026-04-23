@@ -382,7 +382,15 @@ function Contact({ theme }) {
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
   const inputStyle = {width:'100%',background:theme.bgCard,border:`1.5px solid ${theme.border}`,borderRadius:8,padding:'13px 16px',color:theme.text,fontFamily:'DM Sans',fontSize:15,outline:'none',transition:'border-color 0.2s'};
   const labelStyle = {display:'block',color:theme.textMuted,fontSize:13,fontWeight:600,letterSpacing:'0.5px',textTransform:'uppercase',marginBottom:8};
-  const handleSubmit = (e) => { e.preventDefault(); setSubmitted(true); };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("https://formspree.io/f/mrerrlyw", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(form)
+    });
+    if (res.ok) setSubmitted(true);
+  };
   return (
     <section id="contact" style={{background:theme.bg,padding:'100px 32px'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1.4fr',gap:80,alignItems:'start'}}>
