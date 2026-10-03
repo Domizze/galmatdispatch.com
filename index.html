@@ -3,12 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Galmat Dispatch | Your trucks stay loaded</title>
+    <title>Truck Dispatch Service for Small Fleets | Galmat Dispatch</title>
     <meta name="description" content="Truck dispatch for small fleets, 2 to 10 trucks. A real dispatcher books your loads, you get a report every week, and you pay us only after your factoring company pays you." />
+    <link rel="canonical" href="https://galmatdispatch.com/" />
     <meta name="theme-color" content="#05070c" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Galmat Dispatch" />
+    <meta property="og:url" content="https://galmatdispatch.com/" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="Galmat Dispatch | Your trucks stay loaded" />
     <meta property="og:description" content="Truck dispatch for small fleets, 2 to 10 trucks. A real dispatcher books your loads, you get a report every week, and you pay us only after your factoring company pays you." />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://galmatdispatch.com/#org",
+          "name": "Galmat Dispatch",
+          "legalName": "Galmat Dispatch Service LLC",
+          "url": "https://galmatdispatch.com/",
+          "logo": "https://galmatdispatch.com/apple-touch-icon.png",
+          "email": "info@galmatdispatch.com",
+          "telephone": "+1-224-443-9797",
+          "sameAs": [
+            "https://www.facebook.com/galmatdispatch",
+            "https://www.instagram.com/galmatdispatchservice/",
+            "https://t.me/CezarGDS"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-224-443-9797",
+            "email": "info@galmatdispatch.com",
+            "contactType": "sales",
+            "areaServed": "US",
+            "availableLanguage": "English"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://galmatdispatch.com/#site",
+          "url": "https://galmatdispatch.com/",
+          "name": "Galmat Dispatch",
+          "publisher": { "@id": "https://galmatdispatch.com/#org" }
+        },
+        {
+          "@type": "Service",
+          "name": "Truck dispatch service for small fleets",
+          "serviceType": "Truck dispatching",
+          "provider": { "@id": "https://galmatdispatch.com/#org" },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "audience": { "@type": "BusinessAudience", "audienceType": "Trucking companies with 2 to 10 trucks" },
+          "description": "A dedicated dispatcher finds loads, negotiates rates with brokers and plans reloads for dry van, reefer, flatbed and step deck trucks. Weekly report on money, trucks and drivers. No setup fee, nothing upfront: the carrier pays only after their factoring company pays them for the delivered load."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "What does a truck dispatch service do?", "acceptedAnswer": { "@type": "Answer", "text": "A truck dispatcher finds loads for your trucks, negotiates the rate with brokers and plans the next load before you deliver, so your trucks don't sit empty. At Galmat Dispatch, one real dispatcher works your trucks, your drivers and your lanes, and sends you a report every week." } },
+            { "@type": "Question", "name": "Who is Galmat Dispatch for?", "acceptedAnswer": { "@type": "Answer", "text": "Small trucking companies running 2 to 10 trucks under their own MC authority. We dispatch dry van, reefer, flatbed and step deck." } },
+            { "@type": "Question", "name": "How much does it cost to start?", "acceptedAnswer": { "@type": "Answer", "text": "Nothing. There is no setup fee and nothing to pay upfront. You pay our fee only after your factoring company has paid you for the delivered load." } },
+            { "@type": "Question", "name": "How do I get paid?", "acceptedAnswer": { "@type": "Answer", "text": "Your driver delivers and sends the signed BOL, the paperwork goes to your factoring company, and they pay you. Only after that money is in your account do you pay us." } },
+            { "@type": "Question", "name": "What do I need to sign up?", "acceptedAnswer": { "@type": "Answer", "text": "Five documents: your MC/DOT authority, a W-9, a certificate of insurance, the notice of assignment (NOA) from your factoring company, and our signed dispatch agreement. Email or text them to us and we get to work." } },
+            { "@type": "Question", "name": "What is in the weekly report?", "acceptedAnswer": { "@type": "Answer", "text": "Your money (gross, what's paid, what's still waiting on factoring), your trucks (miles, rate per mile, empty miles, next load) and your drivers (who hauled what, on time or not, and any trouble on the road)." } },
+            { "@type": "Question", "name": "How do I get started?", "acceptedAnswer": { "@type": "Answer", "text": "Fill out the form on galmatdispatch.com, call (224) 443-9797, message @CezarGDS on Telegram or email info@galmatdispatch.com. We call you back." } }
+          ]
+        }
+      ]
+    }
+    </script>
     <!-- Same "G" icon as the GDS Load Board Tools Chrome extension -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
@@ -21,6 +84,20 @@
     </script>
     <script type="module" crossorigin src="/assets/index-D4IbxAJK.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-DCRT_S11.css">
+    <style>
+      .faq{background:var(--bg);border-top:1px solid var(--line);padding:clamp(80px,11vw,140px) 0 clamp(70px,9vw,120px)}
+      .faq__title{margin:18px 0 clamp(28px,4vw,52px);font-size:clamp(2.6rem,5vw,5rem)}
+      .faq__list{display:grid;gap:12px;max-width:880px}
+      .faq__item{border:1px solid var(--line-2);border-radius:var(--radius);background:var(--surface)}
+      .faq__item summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:20px 24px;font-weight:700;font-size:1.1rem;color:var(--text)}
+      .faq__item summary::-webkit-details-marker{display:none}
+      .faq__item summary::after{content:"+";color:var(--accent-bright);font-size:1.4rem;line-height:1}
+      .faq__item[open] summary::after{content:"\2212"}
+      .faq__item summary:focus-visible{outline:2px solid var(--accent-bright);outline-offset:2px;border-radius:var(--radius)}
+      .faq__item p{margin:0;padding:0 24px 22px;color:var(--muted);line-height:1.6}
+      .nav__logo .logo{aspect-ratio:596/222;height:40px}
+      @media (max-width:899px){.nav__logo .logo{height:32px}}
+    </style>
   </head>
   <body>
     
@@ -30,7 +107,7 @@
 
 <nav class="nav" aria-label="Main">
   <div class="nav__bar">
-    <a class="nav__logo" href="#top" data-scroll><svg class="logo" viewBox="14 14 687 331" role="img" aria-label="Galmat Dispatch Service" focusable="false"><use href="#galmat-logo"/></svg></a>
+    <a class="nav__logo" href="#top" data-scroll><svg class="logo" viewBox="60 58 596 222" role="img" aria-label="Galmat Dispatch Service" focusable="false"><use href="#galmat-logo" x="14" y="14" width="687" height="331"/></svg></a>
     <ol class="rail" aria-label="How it works">
       <li class="rail__step" data-step="1">
         <a href="#onboard" data-scroll>
@@ -67,7 +144,7 @@
   <div class="hero__bg" aria-hidden="true"><div class="hero__glow"></div><div class="hero__grain"></div></div>
   <div class="hero__inner container">
     <div class="hero__copy">
-      <p class="eyebrow"><span class="eyebrow__dot"></span>Dispatch for fleets of 2 to 10 trucks</p>
+      <p class="eyebrow"><span class="eyebrow__dot"></span>Truck dispatch service for fleets of 2 to 10 trucks</p>
       <h1 class="display hero__title">Your trucks <span class="hl">stay loaded.</span></h1>
       <p class="hero__lead">We find the loads, fight for the rate and send you a straight report every week. Your factoring company pays you first. <strong>We get paid last.</strong></p>
       <div class="hero__ctas">
@@ -579,6 +656,22 @@
         </div>
       </li>
     </ul>
+  </div>
+</section>
+
+<section class="faq" id="faq" aria-labelledby="faq-title">
+  <div class="container">
+    <p class="stage__kicker"><span class="stage__num">?</span><span>Questions</span></p>
+    <h2 class="display faq__title" id="faq-title">Truck dispatch, straight answers.</h2>
+    <div class="faq__list">
+      <details class="faq__item"><summary>What does a truck dispatch service do?</summary><p>A truck dispatcher finds loads for your trucks, negotiates the rate with brokers and plans the next load before you deliver, so your trucks don't sit empty. At Galmat Dispatch, one real dispatcher works your trucks, your drivers and your lanes, and sends you a report every week.</p></details>
+      <details class="faq__item"><summary>Who is Galmat Dispatch for?</summary><p>Small trucking companies running 2 to 10 trucks under their own MC authority. We dispatch dry van, reefer, flatbed and step deck.</p></details>
+      <details class="faq__item"><summary>How much does it cost to start?</summary><p>Nothing. There is no setup fee and nothing to pay upfront. You pay our fee only after your factoring company has paid you for the delivered load.</p></details>
+      <details class="faq__item"><summary>How do I get paid?</summary><p>Your driver delivers and sends the signed BOL, the paperwork goes to your factoring company, and they pay you. Only after that money is in your account do you pay us.</p></details>
+      <details class="faq__item"><summary>What do I need to sign up?</summary><p>Five documents: your MC/DOT authority, a W-9, a certificate of insurance, the notice of assignment (NOA) from your factoring company, and our signed dispatch agreement. Email or text them to us and we get to work.</p></details>
+      <details class="faq__item"><summary>What is in the weekly report?</summary><p>Your money (gross, what's paid, what's still waiting on factoring), your trucks (miles, rate per mile, empty miles, next load) and your drivers (who hauled what, on time or not, and any trouble on the road).</p></details>
+      <details class="faq__item"><summary>How do I get started?</summary><p>Fill out the form below, call <a href="tel:+12244439797">(224) 443-9797</a>, message <a href="https://t.me/CezarGDS" target="_blank" rel="noopener">@CezarGDS</a> on Telegram or email <a href="mailto:info@galmatdispatch.com">info@galmatdispatch.com</a>. We call you back.</p></details>
+    </div>
   </div>
 </section>
 

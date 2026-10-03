@@ -1,0 +1,21 @@
+# Galmat Dispatch
+
+> Galmat Dispatch (Galmat Dispatch Service LLC) is a US truck dispatch service for small trucking companies running 2 to 10 trucks. A dedicated dispatcher books loads, negotiates rates with brokers and plans reloads. Carriers get a weekly report on money, trucks and drivers. No setup fee and nothing upfront: carriers pay Galmat only after their factoring company has paid them for the delivered load.
+
+## Service
+
+- Who it's for: trucking companies with 2 to 10 trucks under their own MC authority
+- Equipment: dry van, reefer, flatbed, step deck
+- What the dispatcher does: finds loads, negotiates the rate with brokers, plans the next load before delivery so trucks don't sit
+- Weekly report: gross, paid, waiting on factoring; miles, rate per mile, empty miles per truck; driver on-time record
+- Payment: $0 upfront, no setup fee; the dispatch fee is paid after the factoring company pays the carrier
+- Onboarding: five documents (MC/DOT authority, W-9, certificate of insurance, factoring NOA, signed dispatch agreement)
+
+## Contact
+
+- Website: https://galmatdispatch.com/
+- Phone: (224) 443-9797
+- Email: info@galmatdispatch.com
+- Telegram: https://t.me/CezarGDS
+- Facebook: https://www.facebook.com/galmatdispatch
+- Instagram: https://www.instagram.com/galmatdispatchservice/
